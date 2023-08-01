@@ -21,6 +21,7 @@ fi
 
 if [ -d "$HOME/go" ] ; then
 	export GOPATH=$HOME/go
+	export PATH=$PATH:"/usr/local/go/bin"
 	export PATH=$PATH:"$HOME/go/bin"
 fi
 
@@ -44,7 +45,8 @@ fi
 ## History in cache directory:
 HISTSIZE=10000000
 SAVEHIST=10000000
-HISTFILE=~/.cache/zsh/history
+HISTFILE=~/.cache/zsh/.histfile
+setopt appendhistory
 
 ## Basic auto/tab complete:
 autoload -U compinit
@@ -64,6 +66,13 @@ if _check pacman; then
 
 	# Fix sometime borken pacman installation
 	alias pasyuk="sudo pacman -Sy archlinux-keyring"
+fi
+## DNF
+if _check dnf; then
+    alias ds="dnf search"
+    alias di="sudo dnf install"
+    alias dcu="sudo dnf check-update"
+    alias dup="sudo dnf check-update && sudo dnf upgrade"
 fi
 ## apt
 if _check apt; then
@@ -90,7 +99,7 @@ if _check kubectl; then
 	alias k="kubectl"
 
 	# Tab completition for kubectl
-	source <(kubectl completion zsh | sed s/kubectl/k/g) 
+    source <(kubectl completion zsh)
 fi
 
 ## Git commands
@@ -222,13 +231,12 @@ if [ ! -d ~/.local/share/zsh/plugins/colorize ]; then
 fi
 
 # autosuggestions plugin
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # zsh syntax highlighting
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.local/share/zsh/plugins/colorize/colorize.plugin.zsh
 
 export PATH=$PATH:/home/sv/.local/bin
 
 # Azure CLI completition
 autoload bashcompinit && bashcompinit
-source '/home/sv/.local/bin/azure-cli/az.completion'
